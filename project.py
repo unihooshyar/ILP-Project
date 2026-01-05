@@ -29,6 +29,8 @@ def parse_results(output, duration):
         "time": round(duration, 4)
     }
 
+# ... (Keep imports and parse_results function the same)
+
 def run_benchmarks():
     print(f"🚀 Starting ILP Benchmark Suite at {datetime.now().strftime('%H:%M:%S')}")
     print(f"Root Directory: {BASE_DIR}\n" + "-"*60)
@@ -43,14 +45,20 @@ def run_benchmarks():
             print(f"⚠️ Skipping {task}: Folder not found.")
             continue
 
-        # 1. Temporarily copy bk.pl into the task folder so Popper can see it
-        shutil.copy(BK_SOURCE, task_bk)
+        # --- UPDATED LOGIC FOR SIBLING ---
+        # Only copy the shared BK if the task doesn't have its own unique one
+        copied_bk = False
+        if not os.path.exists(task_bk):
+            shutil.copy(BK_SOURCE, task_bk)
+            copied_bk = True
+        else:
+            print(f"📂 Using local bk.pl for {task}")
 
         print(f"🔎 Analyzing Task: {task:12}", end=" ", flush=True)
         
         start_time = time.time()
         
-        # 2. Execute Popper on the sub-folder
+        # Execute Popper
         process = subprocess.run(
             ['python3', POPPER_PATH, task_path],
             capture_output=True,
@@ -60,27 +68,26 @@ def run_benchmarks():
         duration = time.time() - start_time
         metrics = parse_results(process.stdout, duration)
         metrics["task"] = task
-        
         results_data.append(metrics)
         
-        # 3. Terminal Output Logic
+        # Terminal Output
         status = "✅ Success" if metrics["rule"] != "FAILED" else "❌ Failed"
         print(f"{status} ({metrics['time']}s)")
         
         if metrics["rule"] != "FAILED":
-            # Indent and print the rule for clear terminal reading
             indented_rule = "      " + metrics["rule"].replace("\n", "\n      ")
             print(f"   📜 Rule Found:\n{indented_rule}\n")
-        else:
-            print(f"   ℹ️  No solution found for {task}.\n")
-
-        # 4. Clean up: Remove the temporary bk.pl copy
-        if os.path.exists(task_bk):
+        
+        # --- UPDATED CLEANUP ---
+        # Only remove the file if we were the ones who copied it there
+        if copied_bk and os.path.exists(task_bk):
             os.remove(task_bk)
 
     save_to_log(results_data)
     print("-" * 60)
     print(f"📊 Comparison report saved to: {LOG_FILE}")
+
+# ... (Keep save_to_log and main block the same)
 
 def save_to_log(data_list):
     # Overwrites the log file with fresh data each time the benchmark is run
