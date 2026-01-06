@@ -1,7 +1,7 @@
 task,time,hypotheses,rule
-Ancestor,0.5424,N/A,"ancestor(V0,V1):- parent(V0,V1).
+Ancestor,0.3006,N/A,"ancestor(V0,V1):- parent(V0,V1).
 ancestor(V0,V1):- parent(V0,V2),ancestor(V2,V1)."
-Grandparent,0.3059,N/A,"grandparent(V0,V1):- parent(V0,V2),parent(V2,V1)."
-Sibling,0.2906,N/A,FAILED
-Uncle,0.3075,N/A,"uncle(V0,V1):- male(V0),sibling(V0,V2),parent(V2,V1)."
-Aunt,0.284,N/A,"aunt(V0,V1):- sibling(V0,V2),parent(V2,V1),female(V0)."
+Grandparent,0.2877,N/A,"grandparent(V0,V1):- parent(V0,V2),parent(V2,V1)."
+Sibling,0.3026,N/A,"sibling(V0,V1):- diff(V0,V1),parent(V2,V0),parent(V2,V1)."
+Uncle,0.2979,N/A,"uncle(V0,V1):- male(V0),sibling(V0,V2),parent(V2,V1)."
+Aunt,0.3169,N/A,"aunt(V0,V1):- sibling(V0,V2),parent(V2,V1),female(V0)."
