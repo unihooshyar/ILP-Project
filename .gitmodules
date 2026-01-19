@@ -1,0 +1,3 @@
+[submodule "aleph/aleph"]
+	path = aleph/aleph
+	url = https://github.com/friguzzi/aleph
