@@ -21,9 +21,12 @@ RUN make
 RUN mkdir -p /opt/progol/bin
 RUN mv progol /opt/progol/bin
 
-WORKDIR /opt/progol/bin
+ENV PATH="/opt/progol/bin:${PATH}"
+
+# this directory is assumed to be mounted into the container
+RUN mkdir /opt/progol/examples
+WORKDIR /opt/progol/examples
 
 RUN pwd
 
 CMD ["/bin/bash"]
-
