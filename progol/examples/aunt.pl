@@ -2,19 +2,19 @@
 % Settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- set(h, 100)?
-:- set(clauselength, 5)?
-:- set(nodes, 5000)?
+:- set(h, 10000)?
+:- set(clauselength, 10)?
+:- set(nodes, 10000)?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Mode declarations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- modeh(1, aunt(+person, -person))?
+:- modeh(1, aunt(+person,+person))?
 :- modeb(1, female(+person))?
-:- modeb(1, sibling(+person, -person))?
-:- modeb(1, parent(+person, -person))?
-:- modeb(1, parent(-person, +person))?
+:- modeb(1, parent(-person,+person))?
+:- modeb(1, parent(+person,-person))?
+:- modeb(1, sibling(+person,+person))?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Types
@@ -52,6 +52,8 @@ aunt(mary, olivia).
 % Negative Examples
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+:- aunt(lucas, mary).
+:- aunt(olivia, mary).
 :- aunt(david, sophie).
 :- aunt(david, lucas).
 :- aunt(emma, david).
@@ -65,6 +67,7 @@ aunt(mary, olivia).
 :- aunt(george, olivia).
 :- aunt(george, jack).
 :- aunt(george, emma).
+:- aunt(emma, george).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Background Knowledge
@@ -85,5 +88,6 @@ sibling(james, sophie).
 sibling(lucas, olivia).
 sibling(olivia, lucas).
 
+%sibling(X, Y) :- sibling(Y, X).
 child_of(X, Y) :- parent(Y, X).
 diff(X, Y) :- X \= Y.
